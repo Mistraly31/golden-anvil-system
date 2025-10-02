@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Golden Anvil System</title>
+<style>
+body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:11px; margin:0; padding:0; }
+.center { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; }
+input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:white; }
+button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; }
+button:hover{ background:#444; }
+.hidden{ display:none; }
+.top-left{ position:absolute; top:10px; left:10px; text-align:left; }
+.top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
+.link-list{ margin-top:70px; text-align:center; }
+.link-list p{ cursor:pointer; margin:10px 0; }
+.content-view{ padding:20px; text-align:center; margin-top:60px; }
+.content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div id="login" class="center">
+  <input type="text" id="username" placeholder="Usuario">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Iniciar sesión</button>
+  <p id="login-error" class="hidden">Login failed</p>
+</div>
+
+<div id="main" class="hidden">
+  <div class="top-left">
+    <div id="account-name"></div>
+    <div id="account-level"></div>
+  </div>
+  <div class="top-right">
+    <button onclick="showMain()">Inicio</button>
+    <button onclick="logout()">Log out</button>
+  </div>
+  <div class="link-list" id="links"></div>
+</div>
+
+<div id="content" class="hidden">
+  <div class="top-right">
+    <button onclick="showMain()">Inicio</button>
+    <button onclick="logout()">Log out</button>
+  </div>
+  <div class="content-view">
+    <div class="content-title" id="content-title"></div>
+    <div id="content-body"></div>
+  </div>
+</div>
+
+<script>
+let data=null;
+let currentUser=null;
+
+// Cargar JSON externo
+fetch("data.json")
+  .then(res => res.json())
+  .then(json => data = json)
+  .catch(err => alert("No se pudo cargar data.json"));
+
+// Login
+function login(){
+  if(!data) return alert("Esperando a cargar datos...");
+  const username=document.getElementById("username").value;
+  const password=document.getElementById("password").value;
+  const user=data.users[username];
+  if(user && atob(user.password)===password){
+    currentUser={name:username, level:user.level};
+    document.getElementById("login").classList.add("hidden");
+    showMain();
+  } else {
+    document.getElementById("login-error").classList.remove("hidden");
+  }
+}
+
+// Logout
+function logout(){
+  currentUser=null;
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("content").classList.add("hidden");
+  document.getElementById("username").value="";
+  document.getElementById("password").value="";
+  document.getElementById("login-error").classList.add("hidden");
+}
+
+// Mostrar lista de enlaces
+function showMain(){
+  if(!currentUser) return logout();
+  document.getElementById("main").classList.remove("hidden");
+  document.getElementById("content").classList.add("hidden");
+  document.getElementById("account-name").innerText="Usuario: "+currentUser.name;
+  document.getElementById("account-level").innerText="Nivel de acceso: "+currentUser.level;
+
+  const linksDiv=document.getElementById("links");
+  linksDiv.innerHTML="";
+  data.links.forEach(link=>{
+    if(currentUser.level>=link.level){
+      const p=document.createElement("p");
+      p.innerText=link.name;
+      p.onclick=()=>showContent(link);
+      linksDiv.appendChild(p);
+    }
+  });
+}
+
+// Mostrar contenido de enlace
+function showContent(link){
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("content").classList.remove("hidden");
+  document.getElementById("content-title").innerText=link.name;
+
+  const body=document.getElementById("content-body");
+  body.innerHTML="";
+  if(link.type==="text"){ 
+    body.innerHTML="<p>"+link.content+"</p>"; 
+  }
+  else if(link.type==="external"){
+    const btn=document.createElement("button");
+    btn.innerText="Abrir contenido externo";
+    btn.onclick=()=>window.open(link.url,"_blank");
+    body.appendChild(btn);
+  }
+}
+</script>
+
+</body>
+</html>
