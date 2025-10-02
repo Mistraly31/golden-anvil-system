@@ -1,0 +1,17 @@
+{
+  "users": {
+    "Mistraly31Admin": {
+      "password": "U0FNRVBBU1NXT1JE", 
+      "level": 999
+    },
+    "Zephyr_9": {
+      "password": "UEFTU0tFWQ==",
+      "level": 1
+    }
+  },
+  "links": [
+    {"name":"Documento Lv1","type":"text","content":"Work in progress.","level":1},
+    {"name":"Documento a","type":"text","content":"A","level":2},
+    {"name":"Documento Nivel 3","type":"external","url":"https://sites.google.com/view/goldenanvilsystem/inicio/archivos-de-subpáginas/ppl/bt-hi-d33-rqpmezfj-5-br6efiemwzuzvgrdpdy0zhhcucdh9sbaghrtaw","level":3}
+  ]
+}
