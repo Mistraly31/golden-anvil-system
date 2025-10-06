@@ -24,7 +24,7 @@ button:hover{ background:#444; }
   <input type="text" id="username" placeholder="Usuario">
   <input type="password" id="password" placeholder="Contraseña">
   <button onclick="login()">Iniciar sesión</button>
-  <p id="login-error" class="hidden">Login failed</p>
+  <p id="login-error" class="hidden">Error de inicio de sesión</p>
 </div>
 
 <div id="main" class="hidden">
@@ -51,23 +51,38 @@ button:hover{ background:#444; }
 </div>
 
 <script>
-let data=null;
-let currentUser=null;
+let data = null;
+let currentUser = null;
 
-// Cargar JSON externo
+// Cargar el JSON externo
 fetch("data.json")
-  .then(res => res.json())
-  .then(json => data = json)
-  .catch(err => alert("No se pudo cargar data.json"));
+  .then(response => response.json())
+  .then(json => {
+    data = json;
+    console.log("Datos cargados correctamente.");
+  })
+  .catch(err => {
+    alert("Error al cargar el archivo de datos: " + err);
+  });
 
-// Login
-function login(){
-  if(!data) return alert("Esperando a cargar datos...");
-  const username=document.getElementById("username").value;
-  const password=document.getElementById("password").value;
-  const user=data.users[username];
-  if(user && atob(user.password)===password){
-    currentUser={name:username, level:user.level};
+function login() {
+  if (!data) {
+    alert("Los datos aún no se han cargado. Espera unos segundos y vuelve a intentar.");
+    return;
+  }
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const user = data.users[username];
+
+  if (!user) {
+    document.getElementById("login-error").classList.remove("hidden");
+    return;
+  }
+
+  const decodedPass = atob(user.password); // descodifica Base64
+  if (password === decodedPass) {
+    currentUser = { name: username, level: user.level };
     document.getElementById("login").classList.add("hidden");
     showMain();
   } else {
@@ -75,56 +90,53 @@ function login(){
   }
 }
 
-// Logout
-function logout(){
-  currentUser=null;
+function logout() {
+  currentUser = null;
   document.getElementById("login").classList.remove("hidden");
   document.getElementById("main").classList.add("hidden");
   document.getElementById("content").classList.add("hidden");
-  document.getElementById("username").value="";
-  document.getElementById("password").value="";
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
   document.getElementById("login-error").classList.add("hidden");
 }
 
-// Mostrar lista de enlaces
-function showMain(){
-  if(!currentUser) return logout();
+function showMain() {
+  if (!currentUser) return logout();
   document.getElementById("main").classList.remove("hidden");
   document.getElementById("content").classList.add("hidden");
-  document.getElementById("account-name").innerText="Usuario: "+currentUser.name;
-  document.getElementById("account-level").innerText="Nivel de acceso: "+currentUser.level;
+  document.getElementById("account-name").innerText = "Usuario: " + currentUser.name;
+  document.getElementById("account-level").innerText = "Nivel de acceso: " + currentUser.level;
 
-  const linksDiv=document.getElementById("links");
-  linksDiv.innerHTML="";
-  data.links.forEach(link=>{
-    if(currentUser.level>=link.level){
-      const p=document.createElement("p");
-      p.innerText=link.name;
-      p.onclick=()=>showContent(link);
+  const linksDiv = document.getElementById("links");
+  linksDiv.innerHTML = "";
+
+  data.links.forEach(link => {
+    if (currentUser.level >= link.level) {
+      const p = document.createElement("p");
+      p.innerText = link.name;
+      p.onclick = () => showContent(link);
       linksDiv.appendChild(p);
     }
   });
 }
 
-// Mostrar contenido de enlace
-function showContent(link){
+function showContent(link) {
   document.getElementById("main").classList.add("hidden");
   document.getElementById("content").classList.remove("hidden");
-  document.getElementById("content-title").innerText=link.name;
+  document.getElementById("content-title").innerText = link.name;
 
-  const body=document.getElementById("content-body");
-  body.innerHTML="";
-  if(link.type==="text"){ 
-    body.innerHTML="<p>"+link.content+"</p>"; 
-  }
-  else if(link.type==="external"){
-    const btn=document.createElement("button");
-    btn.innerText="Abrir contenido externo";
-    btn.onclick=()=>window.open(link.url,"_blank");
+  const body = document.getElementById("content-body");
+  body.innerHTML = "";
+
+  if (link.type === "text") {
+    body.innerHTML = "<p>" + link.content + "</p>";
+  } else if (link.type === "external") {
+    const btn = document.createElement("button");
+    btn.innerText = "Abrir contenido externo";
+    btn.onclick = () => window.open(link.url, "_blank");
     body.appendChild(btn);
   }
 }
 </script>
-
 </body>
 </html>
