@@ -14,7 +14,7 @@
     }
   },
   "links": [
-    {"name":"Manual del Usuario","type":"text","content":"Work in progress.","level":1},
+    {"name":"Manual del Usuario","type":"external","content":"https://sites.google.com/view/goldenanvilsystem/inicio/archivos-de-subp%C3%A1ginas/ppl/84zj4g_drqez0kg3-vvhtwnnijat8j_fhb2xwce05_ub4nmvm4-aj","level":1},
     {"name":"Documento a","type":"text","content":"A","level":2},
     {"name":"Documento Nivel 3","type":"external","url":"https://sites.google.com/view/goldenanvilsystem/inicio/archivos-de-subpáginas/ppl/bt-hi-d33-rqpmezfj-5-br6efiemwzuzvgrdpdy0zhhcucdh9sbaghrtaw","level":3}
   ]
