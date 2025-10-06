@@ -18,6 +18,7 @@
     {"name":"Método de Comunicación","type":"text","content":"Los métodos de comunicación permitidos son los canales oficiales de Discor asignados, el correo electrónico y la Mensajería CCC en casos requeridos por la Administración.","level":1},
     {"name":"Cambios de Contraseña o de Cuenta","type":"text","content":"Debe avisar a algún administrador por un medio de comunicación válido designado para pedir un cambio en la contraseña o la cuenta.","level":1},
     {"name":"Documento a","type":"text","content":"A","level":2},
-    {"name":"Documento Importante","type":"external","url":"https://sites.google.com/view/goldenanvilsystem/inicio/archivos-de-subpáginas/ppl/bt-hi-d33-rqpmezfj-5-br6efiemwzuzvgrdpdy0zhhcucdh9sbaghrtaw","level":3}
+    {"name":"Documento Importante","type":"text","content":"Importante","level":3}
+    {"name":"ID de Cuentas","type":"external","url":"https://sites.google.com/view/goldenanvilsystem/inicio/archivos-de-subpáginas/ppl/bt-hi-d33-rqpmezfj-5-br6efiemwzuzvgrdpdy0zhhcucdh9sbaghrtaw","level":50},
   ]
 }
