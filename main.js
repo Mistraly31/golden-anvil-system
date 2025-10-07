@@ -1,44 +1,54 @@
-// main.js
-let data = null;           // data.json: login + links
-let usersData = null;      // users_data.json: información completa de usuarios
+let data = null;             // data.json
+let usersData = null;        // users_data.json
 let currentUser = null;
 
-// ------ Cargar JSON externos ------
+const loginBtn = document.getElementById("loginBtn");
+loginBtn.addEventListener("click", login);
+
+// Cargar ambos JSON
 Promise.all([
   fetch("data.json").then(r => r.json()),
   fetch("users_data.json").then(r => r.json())
-]).then(([d, u]) => {
-  data = d;
-  usersData = u;
-  console.log("JSON cargados correctamente.");
-}).catch(err => {
+])
+.then(([jsonData, jsonUsersData]) => {
+  data = jsonData;
+  usersData = jsonUsersData;
+  console.log("data.json y users_data.json cargados correctamente");
+})
+.catch(err => {
   console.error("Error al cargar JSON:", err);
-  alert("Error al cargar archivos JSON. Si usas file:// usa GitHub Pages o un servidor local.");
+  alert("Error al cargar archivos JSON. Usa GitHub Pages o un servidor.");
 });
 
-// ------ LOGIN ------
-function login(){
+function login() {
   if(!data){ alert("Esperando a cargar datos..."); return; }
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value;
   const user = data.users[username];
 
-  if(!user){ showLoginError(); return; }
+  if(!user){
+    showLoginError();
+    return;
+  }
 
   let expected;
   try { expected = atob(user.password); } catch(e){ expected = user.password; }
-  if(password !== expected){ showLoginError(); return; }
 
-  currentUser = { username, level: user.level, id: user.id };
+  if(password !== expected){
+    showLoginError();
+    return;
+  }
+
+  currentUser = { username: username, level: user.level, id: user.id };
   document.getElementById("login").classList.add("hidden");
   showMain();
 }
 
 function showLoginError(){
-  const errEl = document.getElementById("login-error");
-  errEl.classList.remove("hidden");
-  setTimeout(()=> errEl.classList.add("hidden"), 2500);
+  const err = document.getElementById("login-error");
+  err.classList.remove("hidden");
+  setTimeout(()=> err.classList.add("hidden"), 2500);
 }
 
 function logout(){
@@ -51,7 +61,6 @@ function logout(){
   document.getElementById("password").value = "";
 }
 
-// ------ MAIN VIEW ------
 function showMain(){
   if(!currentUser) return logout();
 
@@ -59,18 +68,18 @@ function showMain(){
   document.getElementById("content").classList.add("hidden");
   document.getElementById("profile").classList.add("hidden");
 
-  // Nombre clicable -> perfil
+  // Mostrar nombre clicable
   const nameEl = document.getElementById("account-name");
   nameEl.innerText = currentUser.username;
   nameEl.style.cursor = "pointer";
   nameEl.onclick = () => showProfile(currentUser.id);
 
-  document.getElementById("account-id").innerText = currentUser.id ? ("ID: " + currentUser.id) : "";
+  document.getElementById("account-id").innerText = "ID: " + currentUser.id;
   document.getElementById("account-level").innerText = "Nivel de acceso: " + currentUser.level;
 
-  // Links
   const linksDiv = document.getElementById("links");
   linksDiv.innerHTML = "";
+
   data.links.forEach(link => {
     if(currentUser.level >= link.level){
       const p = document.createElement("p");
@@ -81,7 +90,6 @@ function showMain(){
   });
 }
 
-// ------ CONTENT VIEW ------
 function showContent(link){
   document.getElementById("main").classList.add("hidden");
   document.getElementById("profile").classList.add("hidden");
@@ -92,37 +100,35 @@ function showContent(link){
   body.innerHTML = "";
 
   if(link.type === "text"){
-    body.innerHTML = "<p>" + link.content + "</p>";
+    body.innerHTML = "<p>"+link.content+"</p>";
   } else if(link.type === "external"){
     const btn = document.createElement("button");
     btn.innerText = "Abrir contenido externo";
-    btn.onclick = () => window.open(link.url, "_blank");
+    btn.onclick = ()=> window.open(link.url,"_blank");
     body.appendChild(btn);
-  } else if(link.type === "enc"){
-    // Aquí puedes poner tu decodificador multi-capa si lo implementas
-    body.innerHTML = "<p>[Contenido cifrado]</p>";
   } else {
     body.innerHTML = "<p>Tipo de enlace desconocido.</p>";
   }
 }
 
-// ------ PROFILE VIEW ------
 function showProfile(id){
-  if(!usersData){ alert("Usuarios no cargados aún."); return; }
-  const rec = usersData[id];
-  if(!rec){ alert("Perfil no encontrado."); return; }
+  if(!usersData || !usersData[id]){
+    alert("Perfil no encontrado.");
+    return;
+  }
 
   document.getElementById("main").classList.add("hidden");
   document.getElementById("content").classList.add("hidden");
   document.getElementById("profile").classList.remove("hidden");
 
+  const rec = usersData[id];
   const container = document.getElementById("profile-body");
   container.innerHTML = "";
 
   const addRow = (label, value) => {
     const div = document.createElement("div");
     div.className = "profile-row";
-    div.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${value !== undefined && value !== null ? escapeHtml(String(value)) : "<em>-</em>"}`;
+    div.innerHTML = "<strong>"+label+":</strong> " + (value !== undefined ? value : "-");
     container.appendChild(div);
   };
 
@@ -136,37 +142,31 @@ function showProfile(id){
   addRow("Cantidad de avisos", rec.warnings);
   addRow("Estado", rec.status);
 
-  // Botones de exportar e imprimir
-  const adminRow = document.createElement("div");
-  adminRow.className = "profile-row";
-  adminRow.innerHTML = `<strong>Acciones:</strong> 
-    <button onclick='printProfile("${id}")'>Imprimir perfil</button> 
-    <button onclick='exportProfile("${id}")'>Exportar (JSON)</button>`;
-  container.appendChild(adminRow);
-}
-
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+  // Botones
+  const btnDiv = document.createElement("div"); btnDiv.className = "profile-row";
+  const exportBtn = document.createElement("button");
+  exportBtn.innerText = "Exportar perfil (JSON)";
+  exportBtn.onclick = ()=> exportProfile(id);
+  const printBtn = document.createElement("button");
+  printBtn.innerText = "Imprimir perfil";
+  printBtn.onclick = ()=> printProfile(id);
+  btnDiv.appendChild(exportBtn);
+  btnDiv.appendChild(printBtn);
+  container.appendChild(btnDiv);
 }
 
 function exportProfile(id){
   const rec = usersData[id];
-  if(!rec) return alert("Perfil no encontrado");
-  const blob = new Blob([JSON.stringify(rec, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([JSON.stringify(rec,null,2)], {type:"application/json"});
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `${rec.username}-${id}.json`;
-  document.body.appendChild(a);
+  a.href = URL.createObjectURL(blob);
+  a.download = rec.username+"-"+id+".json";
   a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }
 
 function printProfile(id){
   const rec = usersData[id];
-  if(!rec) return alert("Perfil no encontrado");
   const w = window.open("about:blank","_blank");
-  const html = `<pre style="color:#111;background:#fff;padding:20px;font-family:monospace;">${escapeHtml(JSON.stringify(rec,null,2))}</pre>`;
+  const html = "<pre style='color:#111;background:#fff;padding:20px;font-family:monospace;'>"+JSON.stringify(rec,null,2)+"</pre>";
   w.document.write(html); w.document.close();
 }
