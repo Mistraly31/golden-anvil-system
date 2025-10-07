@@ -4,7 +4,7 @@
     "nivel": 999,
     "departamento": "Administración Central",
     "fecha_union": "2022-11-04",
-    "proyectos": ["Golden Anvil System", "Proyecto D.A.S.T.", "Módulo IDC"],
+    "proyectos": ["Golden Anvil System", "Golden Anvil System Discord"],
     "notas_admin": "Posee control total del sistema. Supervisa acceso y modificaciones globales.",
     "avisos": 0,
     "estado": "Activo"
@@ -12,21 +12,21 @@
   "016": {
     "nombre": "Zephyr_9",
     "nivel": 1,
-    "departamento": "Comunicación",
-    "fecha_union": "2024-03-21",
-    "proyectos": ["Base de datos inicial", "Red de enlace de usuarios"],
-    "notas_admin": "Usuario colaborador, pendiente de validación de segundo factor.",
-    "avisos": 2,
+    "departamento": "Ninguno",
+    "fecha_union": "2025-10-1",
+    "proyectos": ["Ninguno"],
+    "notas_admin": "Usuario colaborador.",
+    "avisos": 0,
     "estado": "Activo"
   },
   "017": {
     "nombre": "Aleste900",
     "nivel": 1,
-    "departamento": "Diseño y Documentación",
-    "fecha_union": "2024-07-09",
-    "proyectos": ["Diseño visual del G.A.S.", "Interfaz de Acceso Nivel 1"],
-    "notas_admin": "Acceso limitado, revisión pendiente para ascenso a nivel 2.",
-    "avisos": 1,
+    "departamento": "Ninguno",
+    "fecha_union": "2025-10-06",
+    "proyectos": ["Ninguno"],
+    "notas_admin": "Nada.",
+    "avisos": 0,
     "estado": "Activo"
   }
 }
