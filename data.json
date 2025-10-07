@@ -2,15 +2,18 @@
   "users": {
     "Administrador001": {
       "password": "QVNBU2Rhc0RBZnNmYUdzZGZnYWZnYXJnZ2dhc2dhQUhHQUJOR0hZSDdVQTUxODE5ODUyNDIxNzg2Nzc4Ng==",
-      "level": 999
+      "level": 999,
+      "id": "ADM-0001"
     },
     "Zephyr_9": {
       "password": "UGFzc0tleQ==",
-      "level": 1
+      "level": 1,
+      "id": "ZPH-009"
     },
     "Aleste900": {
       "password": "UGFzc0tleQ==",
-      "level": 1
+      "level": 1,
+      "id": "ALE-900"
     }
   },
   "links": [
@@ -27,15 +30,14 @@
       "level": 1
     },
     {
-      "name": "Cambios de Contraseña o de Cuenta",
-      "type": "text",
-      "content": "Debe avisar a algún administrador por un medio de comunicación válido designado para pedir un cambio en la contraseña o la cuenta.",
-      "level": 1
-    },
-    {
-      "name": "Documento a",
-      "type": "text",
-      "content": "A",
+      "name": "Documento a (cifrado multi-capa)",
+      "type": "enc",
+      "payload": "GUx3HR4HIDMBIxgABy4oIiV9KBYqM3APHD0WfjgjNxMbCU4N",
+      "layers": ["xor","caesar","base64"],
+      "meta": {
+        "keyName": "linkKey1",
+        "caesarShift": 3
+      },
       "level": 2
     },
     {
