@@ -3,17 +3,17 @@
     "Administrador001": {
       "password": "QVNBU2Rhc0RBZnNmYUdzZGZnYWZnYXJnZ2dhc2dhQUhHQUJOR0hZSDdVQTUxODE5ODUyNDIxNzg2Nzc4Ng==",
       "level": 999,
-      "id": "ADM-0001"
+      "id": "001"
     },
     "Zephyr_9": {
       "password": "UGFzc0tleQ==",
       "level": 1,
-      "id": "ZPH-009"
+      "id": "016"
     },
     "Aleste900": {
       "password": "UGFzc0tleQ==",
       "level": 1,
-      "id": "ALE-900"
+      "id": "017"
     }
   },
   "links": [
