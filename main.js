@@ -7,7 +7,10 @@ loginBtn.addEventListener("click", login);
 
 // cargar JSON externo (desde la misma raíz)
 fetch("data.json")
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error("HTTP error " + r.status);
+    return r.json();
+  })
   .then(json => {
     data = json;
     console.log("data.json cargado");
@@ -56,7 +59,8 @@ function showMain(){
   document.getElementById("main").classList.remove("hidden");
   document.getElementById("content").classList.add("hidden");
 
-  document.getElementById("account-name").innerText = "Usuario: " + currentUser.name;
+  // Mostrar nombre, ID y nivel (ID entre nombre y nivel)
+  document.getElementById("account-name").innerText = currentUser.name;
   document.getElementById("account-id").innerText = currentUser.id ? ("ID: " + currentUser.id) : "";
   document.getElementById("account-level").innerText = "Nivel de acceso: " + currentUser.level;
 
@@ -82,22 +86,17 @@ async function showContent(link, idx){
 
   try{
     if(link.type === "text"){
-      // plain text
       body.innerHTML = "<p>"+link.content+"</p>";
     } else if(link.type === "external"){
-      // external -> open in new tab (Sites won't allow iframe)
       const btn = document.createElement("button");
       btn.innerText = "Abrir contenido externo";
       btn.onclick = ()=> window.open(link.url, "_blank");
       body.appendChild(btn);
     } else if(link.type === "enc"){
-      // encrypted link: needs payload, layers and meta (meta.keyName, meta.caesarShift...)
       const payload = link.payload;
       const layers = link.layers || [];
       const meta = link.meta || {};
-      // decode via CryptoLayer
       const decoded = CryptoLayer.decodeLayers(payload, layers, meta);
-      // insert as HTML (trusted) — if data is pure text, escape as needed
       body.innerHTML = decoded;
     } else {
       body.innerHTML = "<p>Tipo de enlace desconocido.</p>";
