@@ -16,13 +16,12 @@ button:hover{ background:#444; }
 .link-list p{ cursor:pointer; margin:10px 0; }
 .content-view{ padding:20px; text-align:center; margin-top:60px; }
 .content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
-.user-profile { padding:20px; text-align:left; margin-top:60px; }
-.user-profile p { margin: 5px 0; }
+.user-profile{ padding:20px; margin-top:60px; text-align:left; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- Login -->
 <div id="login" class="center">
   <input type="text" id="username" placeholder="Usuario">
   <input type="password" id="password" placeholder="Contraseña">
@@ -30,7 +29,7 @@ button:hover{ background:#444; }
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
 </div>
 
-<!-- MAIN -->
+<!-- Main -->
 <div id="main" class="hidden">
   <div class="top-left">
     <span id="account-name" style="cursor:pointer;"></span><br>
@@ -44,7 +43,7 @@ button:hover{ background:#444; }
   <div class="link-list" id="links"></div>
 </div>
 
-<!-- CONTENT -->
+<!-- Content / Texto o enlace -->
 <div id="content" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
@@ -56,16 +55,18 @@ button:hover{ background:#444; }
   </div>
 </div>
 
-<!-- USER PROFILE -->
-<div id="profile" class="hidden">
+<!-- Perfil de usuario -->
+<div id="user-profile" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
     <button onclick="logout()">Log out</button>
   </div>
-  <div class="user-profile" id="profile-body"></div>
+  <div class="user-profile" id="profile-body">
+    <h3>Perfil de Usuario</h3>
+    <div id="profile-info">Cargando información...</div>
+  </div>
 </div>
 
 <script src="main.js"></script>
 </body>
 </html>
-
