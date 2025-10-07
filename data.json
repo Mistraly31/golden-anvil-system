@@ -30,6 +30,12 @@
       "level": 1
     },
     {
+      "name": "Cambios de Contraseña o de Cuenta",
+      "type": "text",
+      "content": "Debe avisar a algún administrador por un medio de comunicación válido designado para pedir un cambio en la contraseña o la cuenta.",
+      "level": 1
+    },
+    {
       "name": "Documento a (cifrado multi-capa)",
       "type": "enc",
       "payload": "GUx3HR4HIDMBIxgABy4oIiV9KBYqM3APHD0WfjgjNxMbCU4N",
