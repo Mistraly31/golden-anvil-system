@@ -12,7 +12,7 @@ button:hover{ background:#444; }
 .hidden{ display:none; }
 .top-left{ position:absolute; top:10px; left:10px; text-align:left; }
 .top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
-.link-list{ margin-top:70px; text-align:center; }
+.link-list{ margin-top:90px; text-align:center; }
 .link-list p{ cursor:pointer; margin:10px 0; }
 .content-view{ padding:20px; text-align:center; margin-top:60px; }
 .content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
@@ -23,13 +23,13 @@ button:hover{ background:#444; }
 <div id="login" class="center">
   <input type="text" id="username" placeholder="Usuario">
   <input type="password" id="password" placeholder="Contraseña">
-  <button id="login-btn" onclick="login()" disabled>Iniciar sesión</button>
+  <button id="loginBtn">Iniciar sesión</button>
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
 </div>
 
 <div id="main" class="hidden">
   <div class="top-left">
-    <div id="account-name"></div>
+    <div id="account-name" style="cursor:pointer;"></div>
     <div id="account-id"></div>
     <div id="account-level"></div>
   </div>
@@ -48,6 +48,17 @@ button:hover{ background:#444; }
   <div class="content-view">
     <div class="content-title" id="content-title"></div>
     <div id="content-body"></div>
+  </div>
+</div>
+
+<div id="profile" class="hidden">
+  <div class="top-right">
+    <button onclick="showMain()">Inicio</button>
+    <button onclick="logout()">Log out</button>
+  </div>
+  <div class="content-view">
+    <div class="content-title">Perfil de Usuario</div>
+    <div id="profile-body"></div>
   </div>
 </div>
 
