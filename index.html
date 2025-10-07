@@ -4,56 +4,96 @@
 <meta charset="UTF-8">
 <title>Golden Anvil System</title>
 <style>
-body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:11px; margin:0; padding:0; }
-.center { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; }
-input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:white; }
-button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; border-radius:4px;}
-button:hover{ background:#444; }
-.hidden{ display:none; }
-.top-left{ position:absolute; top:10px; left:10px; text-align:left; line-height:1.05; cursor:default; }
-.top-left .name { font-weight:600; font-size:12px; cursor:pointer; text-decoration:underline; }
-.top-left .id { font-size:11px; color:rgba(255,255,255,0.85); margin-top:2px; }
-.top-left .level { font-size:11px; color:rgba(255,255,255,0.95); margin-top:2px; }
-.top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
-.link-list{ margin-top:90px; text-align:center; }
-.link-list p{ cursor:pointer; margin:10px 0; }
-.content-view{ padding:20px; text-align:center; margin-top:70px; max-width:900px; margin-left:auto; margin-right:auto; }
-.content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
-.profile-card { background:rgba(255,255,255,0.02); padding:16px; border-radius:6px; text-align:left; }
-.profile-row { margin:8px 0; }
-.profile-row strong { display:inline-block; width:160px; color:rgba(255,255,255,0.9); }
-.small-note { color: rgba(255,255,255,0.6); font-size:11px; margin-top:6px; }
-.list-inline { margin:6px 0; padding-left:18px; }
-.badge { display:inline-block; background:#111; border:1px solid rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; margin-right:6px; font-size:11px; }
-.back-btn { position: absolute; top:10px; left:50%; transform:translateX(-50%); }
+body {
+  background: black;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  margin: 0;
+  padding: 0;
+}
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+input {
+  margin: 5px;
+  padding: 5px;
+  background: #111;
+  border: 1px solid #444;
+  color: white;
+}
+button {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+button:hover { background: #444; }
+.hidden { display: none; }
+.top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  text-align: left;
+}
+.top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+.link-list {
+  margin-top: 70px;
+  text-align: center;
+}
+.link-list p {
+  cursor: pointer;
+  margin: 10px 0;
+}
+.content-view {
+  padding: 20px;
+  text-align: center;
+  margin-top: 60px;
+}
+.content-title {
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- Pantalla de inicio de sesión -->
 <div id="login" class="center">
-  <input type="text" id="username" placeholder="Usuario (exacto)"/>
-  <input type="password" id="password" placeholder="Contraseña"/>
-  <button id="loginBtn">Iniciar sesión</button>
+  <input type="text" id="username" placeholder="Usuario">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Iniciar sesión</button>
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
-  <small class="small-note">SOLO PERSONAL AUTORIZADO</small>
 </div>
 
-<!-- MAIN (lista de enlaces) -->
+<!-- Página principal -->
 <div id="main" class="hidden">
   <div class="top-left">
-    <div id="account-name" class="name" title="Ver perfil (clic)"></div>
-    <div id="account-id" class="id"></div>
-    <div id="account-level" class="level"></div>
+    <div id="account-name" style="cursor:pointer; text-decoration:underline;"></div>
+    <div id="account-id"></div>
+    <div id="account-level"></div>
   </div>
   <div class="top-right">
-    <button id="homeBtn" onclick="showMain()">Inicio</button>
-    <button id="logoutBtn" onclick="logout()">Log out</button>
+    <button onclick="showMain()">Inicio</button>
+    <button onclick="logout()">Log out</button>
   </div>
   <div class="link-list" id="links"></div>
 </div>
 
-<!-- CONTENT (vista de enlace individual) -->
+<!-- Página de contenido general -->
 <div id="content" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
@@ -65,20 +105,146 @@ button:hover{ background:#444; }
   </div>
 </div>
 
-<!-- PROFILE (vista del usuario) -->
-<div id="profile" class="hidden">
+<!-- Página de información del usuario -->
+<div id="user-info" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
     <button onclick="logout()">Log out</button>
   </div>
   <div class="content-view">
-    <div class="content-title">Perfil de usuario</div>
-    <div id="profile-body" class="profile-card"></div>
+    <div class="content-title">Perfil del Usuario</div>
+    <div id="user-info-body"></div>
   </div>
 </div>
 
-<script src="crypto.js"></script>
-<script src="main.js"></script>
+<script>
+let data = null;
+let usersData = null;
+let currentUser = null;
+
+// Cargar ambos JSON
+Promise.all([
+  fetch("data.json").then(res => res.json()),
+  fetch("users_data.json").then(res => res.json())
+]).then(([dataJson, usersJson]) => {
+  data = dataJson;
+  usersData = usersJson;
+  console.log("Datos cargados correctamente.");
+}).catch(err => {
+  alert("Error al cargar los archivos de datos: " + err);
+});
+
+// Función de login
+function login() {
+  if (!data) {
+    alert("Los datos aún no se han cargado. Espera unos segundos y vuelve a intentar.");
+    return;
+  }
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const user = data.users[username];
+
+  if (!user) {
+    document.getElementById("login-error").classList.remove("hidden");
+    return;
+  }
+
+  const decodedPass = atob(user.password);
+  if (password === decodedPass) {
+    currentUser = { name: username, level: user.level, id: user.id };
+    document.getElementById("login").classList.add("hidden");
+    showMain();
+  } else {
+    document.getElementById("login-error").classList.remove("hidden");
+  }
+}
+
+// Cerrar sesión
+function logout() {
+  currentUser = null;
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("content").classList.add("hidden");
+  document.getElementById("user-info").classList.add("hidden");
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("login-error").classList.add("hidden");
+}
+
+// Mostrar la pantalla principal
+function showMain() {
+  if (!currentUser) return logout();
+  document.getElementById("main").classList.remove("hidden");
+  document.getElementById("content").classList.add("hidden");
+  document.getElementById("user-info").classList.add("hidden");
+
+  const nameDiv = document.getElementById("account-name");
+  nameDiv.innerText = "Usuario: " + currentUser.name;
+  nameDiv.onclick = showUserInfo;
+
+  document.getElementById("account-id").innerText = "ID: " + currentUser.id;
+  document.getElementById("account-level").innerText = "Nivel de acceso: " + currentUser.level;
+
+  const linksDiv = document.getElementById("links");
+  linksDiv.innerHTML = "";
+
+  data.links.forEach(link => {
+    if (currentUser.level >= link.level) {
+      const p = document.createElement("p");
+      p.innerText = link.name;
+      p.onclick = () => showContent(link);
+      linksDiv.appendChild(p);
+    }
+  });
+}
+
+// Mostrar contenido de los enlaces
+function showContent(link) {
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("content").classList.remove("hidden");
+  document.getElementById("content-title").innerText = link.name;
+
+  const body = document.getElementById("content-body");
+  body.innerHTML = "";
+
+  if (link.type === "text") {
+    body.innerHTML = "<p>" + link.content + "</p>";
+  } else if (link.type === "external") {
+    const btn = document.createElement("button");
+    btn.innerText = "Abrir contenido externo";
+    btn.onclick = () => window.open(link.url, "_blank");
+    body.appendChild(btn);
+  }
+}
+
+// Mostrar información del usuario desde users_data.json
+function showUserInfo() {
+  if (!currentUser) return;
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("content").classList.add("hidden");
+  document.getElementById("user-info").classList.remove("hidden");
+
+  const infoDiv = document.getElementById("user-info-body");
+  infoDiv.innerHTML = "<p>Cargando información...</p>";
+
+  const info = usersData[currentUser.id];
+  if (!info) {
+    infoDiv.innerHTML = "<p>No hay información disponible para este usuario.</p>";
+    return;
+  }
+
+  infoDiv.innerHTML = `
+    <p><strong>Nombre:</strong> ${info.name}</p>
+    <p><strong>ID:</strong> ${currentUser.id}</p>
+    <p><strong>Nivel de acceso:</strong> ${info.level}</p>
+    <p><strong>Departamento:</strong> ${info.department}</p>
+    <p><strong>Fecha de unión:</strong> ${info.joinDate}</p>
+    <p><strong>Proyectos:</strong> ${info.projects.join(", ")}</p>
+    <p><strong>Avisos:</strong> ${info.warnings}</p>
+    <p><strong>Notas administrativas:</strong> ${info.notes}</p>
+  `;
+}
+</script>
 </body>
 </html>
-
