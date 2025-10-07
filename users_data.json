@@ -1,32 +1,33 @@
 {
   "001": {
-    "nombre": "Administrador001",
-    "nivel": 999,
-    "departamento": "Administración Central",
-    "fecha_union": "2022-11-04",
-    "proyectos": ["Golden Anvil System", "Golden Anvil System Discord"],
-    "notas_admin": "Posee control total del sistema. Supervisa acceso y modificaciones globales.",
-    "avisos": 0,
-    "estado": "Activo"
+    "username": "Administrador001",
+    "level": 999,
+    "department": "Administración Central",
+    "joinDate": "2022-11-04",
+    "projects": ["Golden Anvil System", "Golden Anvil System Discord"],
+    "adminNotes": "Posee control total del sistema. Supervisa acceso y modificaciones globales.",
+    "warnings": 0,
+    "status": "Activo"
   },
   "016": {
-    "nombre": "Zephyr_9",
-    "nivel": 1,
-    "departamento": "Ninguno",
-    "fecha_union": "2025-10-1",
-    "proyectos": ["Ninguno"],
-    "notas_admin": "Usuario colaborador.",
-    "avisos": 0,
-    "estado": "Activo"
+    "username": "Zephyr_9",
+    "level": 1,
+    "department": "Ninguno",
+    "joinDate": "2025-10-01",
+    "projects": ["Ninguno"],
+    "adminNotes": "Usuario colaborador.",
+    "warnings": 0,
+    "status": "Activo"
   },
   "017": {
-    "nombre": "Aleste900",
-    "nivel": 1,
-    "departamento": "Ninguno",
-    "fecha_union": "2025-10-06",
-    "proyectos": ["Ninguno"],
-    "notas_admin": "Nada.",
-    "avisos": 0,
-    "estado": "Activo"
+    "username": "Aleste900",
+    "level": 1,
+    "department": "Ninguno",
+    "joinDate": "2025-10-06",
+    "projects": ["Ninguno"],
+    "adminNotes": "Nada.",
+    "warnings": 0,
+    "status": "Activo"
   }
 }
+
