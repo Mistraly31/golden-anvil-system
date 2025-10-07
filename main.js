@@ -66,5 +66,46 @@ function showContent(link) {
   const contentDiv = document.getElementById("content");
   if (!mainDiv || !contentDiv) return;
 
- 
+  mainDiv.classList.add("hidden");
+  contentDiv.classList.remove("hidden");
+  document.getElementById("content-title").innerText = link.name;
 
+  const body = document.getElementById("content-body");
+  body.innerHTML = "";
+
+  if (link.type === "text") {
+    body.innerHTML = `<p>${link.content}</p>`;
+  } else if (link.type === "external") {
+    const btn = document.createElement("button");
+    btn.innerText = "Abrir contenido externo";
+    btn.onclick = () => window.open(link.url, "_blank");
+    body.appendChild(btn);
+  }
+}
+
+// --- Perfil de usuario en user.html ---
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get("id");
+
+if (userId && usersData) {
+  const u = usersData[userId];
+  if (u) {
+    const c = document.getElementById("content");
+    c.classList.remove("loading");
+    c.classList.add("info");
+    c.innerHTML = `
+      <p><strong>Nombre:</strong> ${u.nombre}</p>
+      <p><strong>ID:</strong> ${userId}</p>
+      <p><strong>Nivel:</strong> ${u.nivel}</p>
+      <p><strong>Departamento:</strong> ${u.departamento}</p>
+      <p><strong>Fecha de unión:</strong> ${u.fecha_union}</p>
+      <p><strong>Proyectos:</strong> ${u.proyectos.join(", ")}</p>
+      <p><strong>Notas administrativas:</strong> ${u.notas_admin}</p>
+      <p><strong>Avisos:</strong> ${u.avisos}</p>
+      <p><strong>Estado:</strong> ${u.estado}</p>
+    `;
+  } else {
+    document.getElementById("content").className = "error";
+    document.getElementById("content").innerText = "Usuario no encontrado";
+  }
+}
