@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>Golden Anvil System</title>
 <style>
-body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:11px; margin:0; padding:0; }
+body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:12px; margin:0; padding:0; }
 .center { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; }
-input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:white; }
+input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:white; width:200px; }
 button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; }
 button:hover{ background:#444; }
 .hidden{ display:none; }
@@ -16,11 +16,14 @@ button:hover{ background:#444; }
 .link-list p{ cursor:pointer; margin:10px 0; }
 .content-view{ padding:20px; text-align:center; margin-top:60px; }
 .content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
-.profile-row{ margin-bottom:10px; }
+.profile-view{ padding:20px; margin-top:60px; }
+.profile-row{ margin-bottom:12px; line-height:1.4em; white-space: pre-line; }
+.profile-row strong{ display:inline-block; width:150px; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login" class="center">
   <input type="text" id="username" placeholder="Usuario">
   <input type="password" id="password" placeholder="Contraseña">
@@ -28,6 +31,7 @@ button:hover{ background:#444; }
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
 </div>
 
+<!-- MAIN -->
 <div id="main" class="hidden">
   <div class="top-left">
     <div id="account-name"></div>
@@ -36,15 +40,16 @@ button:hover{ background:#444; }
   </div>
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
-    <button onclick="logout()">Log out</button>
+    <button onclick="logout()">Cerrar sesión</button>
   </div>
   <div class="link-list" id="links"></div>
 </div>
 
+<!-- CONTENT -->
 <div id="content" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
-    <button onclick="logout()">Log out</button>
+    <button onclick="logout()">Cerrar sesión</button>
   </div>
   <div class="content-view">
     <div class="content-title" id="content-title"></div>
@@ -52,12 +57,13 @@ button:hover{ background:#444; }
   </div>
 </div>
 
+<!-- PROFILE -->
 <div id="profile" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
-    <button onclick="logout()">Log out</button>
+    <button onclick="logout()">Cerrar sesión</button>
   </div>
-  <div class="content-view" id="profile-body"></div>
+  <div class="profile-view" id="profile-body"></div>
 </div>
 
 <script src="main.js"></script>
