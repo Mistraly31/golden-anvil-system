@@ -12,29 +12,32 @@ button:hover{ background:#444; }
 .hidden{ display:none; }
 .top-left{ position:absolute; top:10px; left:10px; text-align:left; }
 .top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
-.link-list{ margin-top:70px; text-align:center; }
+.link-list{ margin-top:90px; text-align:center; }
 .link-list p{ cursor:pointer; margin:10px 0; }
-.content-view{ padding:20px; text-align:center; margin-top:60px; }
+.content-view{ padding:20px; text-align:center; margin-top:70px; }
 .content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
+small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margin-top:6px; }
 </style>
 </head>
 <body>
 
 <div id="login" class="center">
-  <input type="text" id="username" placeholder="Usuario">
-  <input type="password" id="password" placeholder="Contraseña">
-  <button onclick="login()">Iniciar sesión</button>
+  <input type="text" id="username" placeholder="Usuario (email o usuario)"/>
+  <input type="password" id="password" placeholder="Contraseña"/>
+  <button id="loginBtn">Iniciar sesión</button>
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
+  <small class="notice">Si usas GitHub Pages deja data.json en la misma carpeta.</small>
 </div>
 
 <div id="main" class="hidden">
   <div class="top-left">
     <div id="account-name"></div>
-    <div id="account-level"></div>
+    <div id="account-id" style="font-size:11px; color:rgba(255,255,255,0.8)"></div>
+    <div id="account-level" style="font-size:11px; color:rgba(255,255,255,0.9)"></div>
   </div>
   <div class="top-right">
-    <button onclick="showMain()">Inicio</button>
-    <button onclick="logout()">Log out</button>
+    <button id="homeBtn" onclick="showMain()">Inicio</button>
+    <button id="logoutBtn" onclick="logout()">Log out</button>
   </div>
   <div class="link-list" id="links"></div>
 </div>
@@ -50,93 +53,8 @@ button:hover{ background:#444; }
   </div>
 </div>
 
-<script>
-let data = null;
-let currentUser = null;
-
-// Cargar JSON desde GitHub Pages
-fetch("data.json")
-  .then(response => response.json())
-  .then(json => {
-    data = json;
-    console.log("Datos cargados correctamente.");
-  })
-  .catch(err => {
-    alert("Error al cargar el archivo de datos: " + err);
-  });
-
-function login() {
-  if (!data) {
-    alert("Los datos aún no se han cargado. Espera unos segundos y vuelve a intentar.");
-    return;
-  }
-
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const user = data.users[username];
-
-  if (!user) {
-    document.getElementById("login-error").classList.remove("hidden");
-    return;
-  }
-
-  const decodedPass = atob(user.password); // descodifica Base64
-  if (password === decodedPass) {
-    currentUser = { name: username, level: user.level };
-    document.getElementById("login").classList.add("hidden");
-    showMain();
-  } else {
-    document.getElementById("login-error").classList.remove("hidden");
-  }
-}
-
-function logout() {
-  currentUser = null;
-  document.getElementById("login").classList.remove("hidden");
-  document.getElementById("main").classList.add("hidden");
-  document.getElementById("content").classList.add("hidden");
-  document.getElementById("username").value = "";
-  document.getElementById("password").value = "";
-  document.getElementById("login-error").classList.add("hidden");
-}
-
-function showMain() {
-  if (!currentUser) return logout();
-  document.getElementById("main").classList.remove("hidden");
-  document.getElementById("content").classList.add("hidden");
-  document.getElementById("account-name").innerText = "Usuario: " + currentUser.name;
-  document.getElementById("account-level").innerText = "Nivel de acceso: " + currentUser.level;
-
-  const linksDiv = document.getElementById("links");
-  linksDiv.innerHTML = "";
-
-  data.links.forEach(link => {
-    if (currentUser.level >= link.level) {
-      const p = document.createElement("p");
-      p.innerText = link.name;
-      p.onclick = () => showContent(link);
-      linksDiv.appendChild(p);
-    }
-  });
-}
-
-function showContent(link) {
-  document.getElementById("main").classList.add("hidden");
-  document.getElementById("content").classList.remove("hidden");
-  document.getElementById("content-title").innerText = link.name;
-
-  const body = document.getElementById("content-body");
-  body.innerHTML = "";
-
-  if (link.type === "text") {
-    body.innerHTML = "<p>" + link.content + "</p>";
-  } else if (link.type === "external") {
-    const btn = document.createElement("button");
-    btn.innerText = "Abrir contenido externo";
-    btn.onclick = () => window.open(link.url, "_blank");
-    body.appendChild(btn);
-  }
-}
-</script>
+<!-- scripts: primero crypto, luego main -->
+<script src="crypto.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
