@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Golden Anvil System</title>
+<title>Golden Anvil System — Multi-cipher</title>
 <style>
 body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:11px; margin:0; padding:0; }
 .center { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; }
@@ -10,7 +10,10 @@ input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:w
 button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; }
 button:hover{ background:#444; }
 .hidden{ display:none; }
-.top-left{ position:absolute; top:10px; left:10px; text-align:left; }
+.top-left{ position:absolute; top:10px; left:10px; text-align:left; line-height:1.05; }
+.top-left .name { font-weight:600; font-size:12px; }
+.top-left .id { font-size:11px; color:rgba(255,255,255,0.85); margin-top:2px; }
+.top-left .level { font-size:11px; color:rgba(255,255,255,0.95); margin-top:2px; }
 .top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
 .link-list{ margin-top:90px; text-align:center; }
 .link-list p{ cursor:pointer; margin:10px 0; }
@@ -31,9 +34,9 @@ small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margi
 
 <div id="main" class="hidden">
   <div class="top-left">
-    <div id="account-name"></div>
-    <div id="account-id" style="font-size:11px; color:rgba(255,255,255,0.8)"></div>
-    <div id="account-level" style="font-size:11px; color:rgba(255,255,255,0.9)"></div>
+    <div id="account-name" class="name"></div>
+    <div id="account-id" class="id"></div>
+    <div id="account-level" class="level"></div>
   </div>
   <div class="top-right">
     <button id="homeBtn" onclick="showMain()">Inicio</button>
@@ -53,7 +56,7 @@ small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margi
   </div>
 </div>
 
-<!-- scripts: primero crypto, luego main -->
+<!-- scripts: primero crypto (si lo usas), luego main -->
 <script src="crypto.js"></script>
 <script src="main.js"></script>
 </body>
