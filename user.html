@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Información del Usuario</title>
+  <style>
+    body {
+      font-family: "Consolas", monospace;
+      background-color: #0d0d0d;
+      color: #00ffea;
+      padding: 30px;
+    }
+    h1 {
+      border-bottom: 2px solid #00ffea;
+      padding-bottom: 8px;
+    }
+    .loading {
+      color: #888;
+    }
+    .info {
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+    .error {
+      color: #ff4c4c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Información del Usuario</h1>
+  <div id="content" class="loading">Cargando información...</div>
+
+  <script>
+    // Obtener el ID desde la URL
+    const params = new URLSearchParams(window.location.search);
+    const userID = params.get("id");
+
+    if (!userID) {
+      document.getElementById("content").innerHTML = '<p class="error">❌ No se proporcionó un ID de usuario válido.</p>';
+    } else {
+      fetch("users_data.json")
+        .then(response => {
+          if (!response.ok) throw new Error("Error al cargar users_data.json");
+          return response.json();
+        })
+        .then(data => {
+          const user = data[userID];
+          if (!user) {
+            document.getElementById("content").innerHTML = '<p class="error">⚠️ No se encontró información para este ID.</p>';
+            return;
+          }
+
+          // Mostrar información del usuario
+          document.getElementById("content").innerHTML = `
+            <div class="info">
+              <p><strong>ID:</strong> ${userID}</p>
+              <p><strong>Nombre:</strong> ${user.nombre}</p>
+              <p><strong>Nivel de acceso:</strong> ${user.nivel}</p>
+              <p><strong>Departamento:</strong> ${user.departamento}</p>
+              <p><strong>Fecha de unión:</strong> ${user.fecha_union}</p>
+              <p><strong>Proyectos:</strong> ${user.proyectos.join(", ")}</p>
+              <p><strong>Notas de administración:</strong> ${user.notas_admin}</p>
+              <p><strong>Avisos:</strong> ${user.avisos}</p>
+              <p><strong>Estado:</strong> ${user.estado}</p>
+            </div>
+          `;
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById("content").innerHTML = '<p class="error">Error al cargar la información del usuario.</p>';
+        });
+    }
+  </script>
+</body>
+</html>
