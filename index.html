@@ -7,34 +7,42 @@
 body { background:black; color:white; font-family:'Roboto',sans-serif; font-size:11px; margin:0; padding:0; }
 .center { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; }
 input { margin:5px; padding:5px; background:#111; border:1px solid #444; color:white; }
-button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; }
+button { background:#222; color:white; border:none; padding:5px 10px; margin:5px; cursor:pointer; border-radius:4px;}
 button:hover{ background:#444; }
 .hidden{ display:none; }
-.top-left{ position:absolute; top:10px; left:10px; text-align:left; line-height:1.05; }
-.top-left .name { font-weight:600; font-size:12px; }
+.top-left{ position:absolute; top:10px; left:10px; text-align:left; line-height:1.05; cursor:default; }
+.top-left .name { font-weight:600; font-size:12px; cursor:pointer; text-decoration:underline; }
 .top-left .id { font-size:11px; color:rgba(255,255,255,0.85); margin-top:2px; }
 .top-left .level { font-size:11px; color:rgba(255,255,255,0.95); margin-top:2px; }
 .top-right{ position:absolute; top:10px; right:10px; display:flex; gap:5px; }
 .link-list{ margin-top:90px; text-align:center; }
 .link-list p{ cursor:pointer; margin:10px 0; }
-.content-view{ padding:20px; text-align:center; margin-top:70px; }
+.content-view{ padding:20px; text-align:center; margin-top:70px; max-width:900px; margin-left:auto; margin-right:auto; }
 .content-title{ font-weight:bold; margin-bottom:20px; font-size:14px; }
-small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margin-top:6px; }
+.profile-card { background:rgba(255,255,255,0.02); padding:16px; border-radius:6px; text-align:left; }
+.profile-row { margin:8px 0; }
+.profile-row strong { display:inline-block; width:160px; color:rgba(255,255,255,0.9); }
+.small-note { color: rgba(255,255,255,0.6); font-size:11px; margin-top:6px; }
+.list-inline { margin:6px 0; padding-left:18px; }
+.badge { display:inline-block; background:#111; border:1px solid rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; margin-right:6px; font-size:11px; }
+.back-btn { position: absolute; top:10px; left:50%; transform:translateX(-50%); }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login" class="center">
-  <input type="text" id="username" placeholder="Usuario (email o usuario)"/>
+  <input type="text" id="username" placeholder="Usuario (exacto)"/>
   <input type="password" id="password" placeholder="Contraseña"/>
   <button id="loginBtn">Iniciar sesión</button>
   <p id="login-error" class="hidden">Error de inicio de sesión</p>
-  <small class="notice">Si usas GitHub Pages deja data.json en la misma carpeta.</small>
+  <small class="small-note">Si usas GitHub Pages deja data.json en la misma carpeta.</small>
 </div>
 
+<!-- MAIN (lista de enlaces) -->
 <div id="main" class="hidden">
   <div class="top-left">
-    <div id="account-name" class="name"></div>
+    <div id="account-name" class="name" title="Ver perfil (clic)"></div>
     <div id="account-id" class="id"></div>
     <div id="account-level" class="level"></div>
   </div>
@@ -45,6 +53,7 @@ small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margi
   <div class="link-list" id="links"></div>
 </div>
 
+<!-- CONTENT (vista de enlace individual) -->
 <div id="content" class="hidden">
   <div class="top-right">
     <button onclick="showMain()">Inicio</button>
@@ -56,8 +65,20 @@ small.notice { color:rgba(255,255,255,0.6); font-size:10px; display:block; margi
   </div>
 </div>
 
-<!-- scripts: primero crypto (si lo usas), luego main -->
+<!-- PROFILE (vista del usuario) -->
+<div id="profile" class="hidden">
+  <div class="top-right">
+    <button onclick="showMain()">Inicio</button>
+    <button onclick="logout()">Log out</button>
+  </div>
+  <div class="content-view">
+    <div class="content-title">Perfil de usuario</div>
+    <div id="profile-body" class="profile-card"></div>
+  </div>
+</div>
+
 <script src="crypto.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
+
