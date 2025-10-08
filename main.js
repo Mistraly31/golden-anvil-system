@@ -68,7 +68,6 @@ function showMain(){
   document.getElementById("content").classList.add("hidden");
   document.getElementById("profile").classList.add("hidden");
 
-  // Mostrar nombre clicable
   const nameEl = document.getElementById("account-name");
   nameEl.innerText = currentUser.username;
   nameEl.style.cursor = "pointer";
@@ -125,20 +124,20 @@ function showProfile(id){
   const container = document.getElementById("profile-body");
   container.innerHTML = "";
 
+  // Helpers
   const addRow = (label, value) => {
     const div = document.createElement("div");
     div.className = "profile-row";
-    div.innerHTML = "<strong>"+label+":</strong> " + (value !== undefined ? value : "-");
-    container.appendChild(div);
-    
-  const addoneonly = (label, value) => {
-    const div = document.createElement("div");
-    div.className = "profile-row";
-    div.innerHTML = "<strong>"+label+":</strong>");
+    div.innerHTML = `<strong>${label}:</strong> <span style="margin-left: 10px;">${value ?? "-"}</span>`;
     container.appendChild(div);
   };
 
-  addoneonly("INFORMACIÓN");
+  // Mostrar info ordenada tipo tabla
+  const title = document.createElement("h3");
+  title.innerText = "INFORMACIÓN DE PERFIL";
+  title.style.marginBottom = "10px";
+  container.appendChild(title);
+
   addRow("Nombre de usuario", rec.username);
   addRow("ID", id);
   addRow("Nivel de acceso", rec.level);
@@ -149,14 +148,18 @@ function showProfile(id){
   addRow("Cantidad de avisos", rec.warnings);
   addRow("Estado", rec.status);
 
-  // Botones
-  const btnDiv = document.createElement("div"); btnDiv.className = "profile-row";
+  const btnDiv = document.createElement("div"); 
+  btnDiv.className = "profile-row";
+  btnDiv.style.marginTop = "20px";
+
   const exportBtn = document.createElement("button");
   exportBtn.innerText = "Exportar perfil (JSON)";
   exportBtn.onclick = ()=> exportProfile(id);
+
   const printBtn = document.createElement("button");
   printBtn.innerText = "Imprimir perfil";
   printBtn.onclick = ()=> printProfile(id);
+
   btnDiv.appendChild(exportBtn);
   btnDiv.appendChild(printBtn);
   container.appendChild(btnDiv);
@@ -175,5 +178,6 @@ function printProfile(id){
   const rec = usersData[id];
   const w = window.open("about:blank","_blank");
   const html = "<pre style='color:#111;background:#fff;padding:20px;font-family:monospace;'>"+JSON.stringify(rec,null,2)+"</pre>";
-  w.document.write(html); w.document.close();
+  w.document.write(html); 
+  w.document.close();
 }
