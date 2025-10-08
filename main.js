@@ -134,7 +134,7 @@ function showProfile(id){
   const addoneonly = (label, value) => {
     const div = document.createElement("div");
     div.className = "profile-row";
-    div.innerHTML = "<strong>"+label+":</strong> ");
+    div.innerHTML = "<strong>"+label+":</strong>");
     container.appendChild(div);
   };
 
