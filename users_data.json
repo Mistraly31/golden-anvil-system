@@ -28,5 +28,15 @@
     "adminNotes": "Nada.",
     "warnings": 0,
     "status": "Activo"
+  },
+  "018": {
+    "username": "Tester",
+    "level": 1,
+    "department": "Ninguno",
+    "joinDate": "",
+    "projects": ["Ninguno"],
+    "adminNotes": "Nada.",
+    "warnings": 0,
+    "status": "Test"
   }
 }
