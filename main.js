@@ -130,9 +130,15 @@ function showProfile(id){
     div.className = "profile-row";
     div.innerHTML = "<strong>"+label+":</strong> " + (value !== undefined ? value : "-");
     container.appendChild(div);
+    
+  const addoneonly = (label, value) => {
+    const div = document.createElement("div");
+    div.className = "profile-row";
+    div.innerHTML = "<strong>"+label+":</strong> ");
+    container.appendChild(div);
   };
 
-  addRow("INFORMACIÓN PERSONAL");
+  addoneonly("INFORMACIÓN");
   addRow("Nombre de usuario", rec.username);
   addRow("ID", id);
   addRow("Nivel de acceso", rec.level);
