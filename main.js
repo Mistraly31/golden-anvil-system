@@ -132,6 +132,7 @@ function showProfile(id){
     container.appendChild(div);
   };
 
+  addRow("INFORMACIÓN PERSONAL");
   addRow("Nombre de usuario", rec.username);
   addRow("ID", id);
   addRow("Nivel de acceso", rec.level);
